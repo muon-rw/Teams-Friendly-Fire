@@ -1,4 +1,4 @@
-package dev.muon.questkilltask.platform;
+package dev.muon.teamsfriendlyfire.platform;
 
 import net.fabricmc.loader.api.FabricLoader;
 

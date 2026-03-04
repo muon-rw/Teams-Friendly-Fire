@@ -1,4 +1,4 @@
-package dev.muon.questkilltask.platform;
+package dev.muon.teamsfriendlyfire.platform;
 
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
