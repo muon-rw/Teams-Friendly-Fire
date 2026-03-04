@@ -66,6 +66,8 @@ public final class FTBTeamsUtils {
         for (int i = 0; i < maxDepth && current != null; i++) {
             if (current instanceof Player player) return player;
             Entity owner = null;
+            // TODO: Maybe test against modded implementations that may not implement Ownable
+            // Probably fine though
             if (current instanceof OwnableEntity ownable) {
                 owner = ownable.getOwner();
             }

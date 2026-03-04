@@ -80,6 +80,14 @@ neoForge {
             sourceSet = sourceSets["test"]
             jvmArguments.set(setOf("-Dmixin.debug.verbose=true", "-Dmixin.debug.export=true"))
         }
+        create("clientExtra") {
+            client()
+            ideName = "NeoForge Client 2 (:${project.name})"
+            gameDirectory.set(file("runs/client2"))
+            sourceSet = sourceSets["test"]
+            jvmArguments.set(setOf("-Dmixin.debug.verbose=true", "-Dmixin.debug.export=true"))
+            programArguments.addAll("--username", "Dev2")
+        }
         create("server") {
             server()
             ideName = "NeoForge Server (:${project.name})"
