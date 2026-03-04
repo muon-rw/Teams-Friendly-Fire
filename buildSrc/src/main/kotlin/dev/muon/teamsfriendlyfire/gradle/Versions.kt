@@ -1,7 +1,7 @@
 package dev.muon.teamsfriendlyfire.gradle
 
 object Versions {
-    const val MOD = "0.3.1"
+    const val MOD = "0.1.0"
 
     const val MINECRAFT = "1.21.1"
     const val PARCHMENT_MINECRAFT = "1.21"
@@ -25,9 +25,6 @@ object Versions {
 
     const val FTB_TEAMS = "2101.1.9"
     const val FTB_LIBRARY = "2101.1.30"
-
-    const val ACCESSORIES = "1.1.0-beta.7+1.21.1"
-
 
     const val IRONS_SPELLS = "1.21.1-3.11.0"
 }

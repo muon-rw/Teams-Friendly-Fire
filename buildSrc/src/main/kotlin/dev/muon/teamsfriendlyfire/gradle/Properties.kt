@@ -7,8 +7,8 @@ object Properties {
     const val MOD_ID = "teamsfriendlyfire"
     const val MOD_AUTHOR = "MuonR"
     val MOD_CONTRIBUTORS = listOf("MuonR")
-    const val DESCRIPTION = "FTB Teams integration for allied/PvP checks with configurable PvP between members and allies"
-    const val LICENSE = "GNU GPL v3.0"
+    const val DESCRIPTION = "FTB Teams integration for allied/PvP checks"
+    const val LICENSE = "ARR"
 
     const val CURSEFORGE_PAGE = "https://www.curseforge.com/minecraft/mc-mods/teams-friendly-fire-addon"
     const val CURSEFORGE_PROJECT_ID = "xxxxxx"
