@@ -2,7 +2,6 @@ package dev.muon.teamsfriendlyfire.compat;
 
 import dev.ftb.mods.ftbteams.api.FTBTeamsAPI;
 import dev.ftb.mods.ftbteams.api.Team;
-import dev.ftb.mods.ftbteams.api.TeamManager;
 import dev.muon.teamsfriendlyfire.property.TeamPropertiesTFF;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.OwnableEntity;
@@ -28,26 +27,8 @@ public final class FTBTeamsUtils {
         if (playerId1 == null || playerId2 == null) return false;
         if (playerId1.equals(playerId2)) return true;
 
-        if (level.isClientSide()) {
-            return checkClientRelation(playerId1, playerId2);
-        }
-        return checkServerRelation(playerId1, playerId2);
-    }
-
-    private static boolean checkClientRelation(UUID playerId1, UUID playerId2) {
-        if (!FTBTeamsAPI.api().isClientManagerLoaded()) return false;
-        var manager = FTBTeamsAPI.api().getClientManager();
-        var p1 = manager.getKnownPlayer(playerId1);
-        var p2 = manager.getKnownPlayer(playerId2);
-        if (p1.isEmpty() || p2.isEmpty()) return false;
-        return p1.get().teamId().equals(p2.get().teamId());
-    }
-
-    private static boolean checkServerRelation(UUID playerId1, UUID playerId2) {
-        if (!FTBTeamsAPI.api().isManagerLoaded()) return false;
-        TeamManager manager = FTBTeamsAPI.api().getManager();
-        Optional<Team> team1Opt = manager.getTeamForPlayerID(playerId1);
-        Optional<Team> team2Opt = manager.getTeamForPlayerID(playerId2);
+        Optional<Team> team1Opt = resolveTeam(playerId1, level);
+        Optional<Team> team2Opt = resolveTeam(playerId2, level);
         if (team1Opt.isEmpty() || team2Opt.isEmpty()) return false;
 
         Team team1 = team1Opt.get();
@@ -61,6 +42,17 @@ public final class FTBTeamsUtils {
                     && !team2.getProperty(TeamPropertiesTFF.PVP_BETWEEN_ALLIES);
         }
         return false;
+    }
+
+    private static Optional<Team> resolveTeam(UUID playerId, Level level) {
+        if (level.isClientSide()) {
+            if (!FTBTeamsAPI.api().isClientManagerLoaded()) return Optional.empty();
+            var manager = FTBTeamsAPI.api().getClientManager();
+            return manager.getKnownPlayer(playerId)
+                    .flatMap(known -> manager.getTeamByID(known.teamId()));
+        }
+        if (!FTBTeamsAPI.api().isManagerLoaded()) return Optional.empty();
+        return FTBTeamsAPI.api().getManager().getTeamForPlayerID(playerId);
     }
 
     /**
