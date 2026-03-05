@@ -11,7 +11,7 @@ object Properties {
     const val LICENSE = "ARR"
 
     const val CURSEFORGE_PAGE = "https://www.curseforge.com/minecraft/mc-mods/teams-friendly-fire-addon"
-    const val CURSEFORGE_PROJECT_ID = "xxxxxx"
+    const val CURSEFORGE_PROJECT_ID = "1477515"
     const val MODRINTH_PAGE = "https://modrinth.com/mod/modrinth-project"
     const val MODRINTH_PROJECT_ID = "????????"
     const val GITHUB_REPO = "/muon-rw/Teams-Friendly-Fire"
