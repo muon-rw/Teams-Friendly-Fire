@@ -3,7 +3,7 @@ import dev.muon.teamsfriendlyfire.gradle.Versions
 
 plugins {
     id("conventions.common")
-    id("net.neoforged.moddev")
+    id("net.neoforged.moddev.legacyforge")
     id("me.modmuss50.mod-publish-plugin")
     id("dev.mixinmcp.decompile")
 }
@@ -13,6 +13,14 @@ sourceSets {
         resources {
             srcDir("src/generated/resources")
         }
+    }
+}
+
+legacyForge {
+    mcpVersion = Versions.MINECRAFT
+    parchment {
+        minecraftVersion = Versions.PARCHMENT_MINECRAFT
+        mappingsVersion = Versions.PARCHMENT
     }
 }
 
@@ -34,31 +42,13 @@ repositories {
     }
 }
 
-neoForge {
-    neoFormVersion = Versions.NEOFORM
-    parchment {
-        minecraftVersion = Versions.PARCHMENT_MINECRAFT
-        mappingsVersion = Versions.PARCHMENT
-    }
-    addModdingDependenciesTo(sourceSets["test"])
-
-    val at = file("src/main/resources/${Properties.MOD_ID}.cfg")
-    if (at.exists())
-        setAccessTransformers(at)
-    validateAccessTransformers = true
-}
-
 dependencies {
     compileOnly("io.github.llamalad7:mixinextras-common:${Versions.MIXIN_EXTRAS}")
     annotationProcessor("io.github.llamalad7:mixinextras-common:${Versions.MIXIN_EXTRAS}")
     compileOnly("net.fabricmc:sponge-mixin:${Versions.FABRIC_MIXIN}")
 
-    // Common is built with neoForge.moddev, so it compiles against NeoForge's classpath.
-    // FTB mods publish base artifacts (ftb-teams, ftb-library) for Arch Loom; we don't use Arch Loom,
-    // so those use intermediary mappings (class_XXXX) and don't match our Parchment/Mojmap setup.
-    // The -neoforge variants use the same mappings as our common code.
-    compileOnly("dev.ftb.mods:ftb-library-neoforge:${Versions.FTB_LIBRARY}")
-    compileOnly("dev.ftb.mods:ftb-teams-neoforge:${Versions.FTB_TEAMS}")
+    compileOnly("dev.ftb.mods:ftb-library-forge:${Versions.FTB_LIBRARY}")
+    compileOnly("dev.ftb.mods:ftb-teams-forge:${Versions.FTB_TEAMS}")
 }
 
 configurations {

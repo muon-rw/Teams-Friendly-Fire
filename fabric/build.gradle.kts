@@ -53,7 +53,6 @@ repositories {
 dependencies {
     minecraft("com.mojang:minecraft:${Versions.MINECRAFT}")
     mappings(loom.officialMojangMappings())
-
     modImplementation("net.fabricmc:fabric-loader:${Versions.FABRIC_LOADER}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${Versions.FABRIC_API}")
     modLocalRuntime("com.terraformersmc:modmenu:${Versions.MOD_MENU}")
@@ -124,7 +123,7 @@ publishMods {
         accessToken = providers.environmentVariable("CF_TOKEN")
 
         minecraftVersions.add(Versions.MINECRAFT)
-        javaVersions.add(JavaVersion.VERSION_21)
+        javaVersions.add(JavaVersion.VERSION_17)
 
         clientRequired = true
         serverRequired = true

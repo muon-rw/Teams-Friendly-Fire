@@ -5,7 +5,7 @@ import org.gradle.jvm.tasks.Jar
 
 plugins {
     id("conventions.loader")
-    id("net.neoforged.moddev")
+    id("net.neoforged.moddev.legacyforge")
     id("me.modmuss50.mod-publish-plugin")
     id("dev.mixinmcp.decompile")
 }
@@ -45,17 +45,35 @@ repositories {
             includeGroup("dev.ftb.mods")
         }
     }
+    maven("https://maven.architectury.dev/")
     maven("https://code.redspace.io/releases")
     maven("https://code.redspace.io/snapshots")
 }
 
 dependencies {
-    implementation("dev.ftb.mods:ftb-library-neoforge:${Versions.FTB_LIBRARY}")
-    implementation("dev.ftb.mods:ftb-teams-neoforge:${Versions.FTB_TEAMS}")
+    annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
+    compileOnly("io.github.llamalad7:mixinextras-common:${Versions.MIXIN_EXTRAS}")
+    annotationProcessor("io.github.llamalad7:mixinextras-common:${Versions.MIXIN_EXTRAS}")
+    jarJar(implementation("io.github.llamalad7:mixinextras-forge:${Versions.MIXIN_EXTRAS}") {
+        version {
+            strictly("[0.5.3,)")
+            prefer("0.5.3")
+        }
+    })
+    // In MDG, modImplementation is non-transitive, so Architectury must be added explicitly for FTB mods
+    modImplementation("dev.architectury:architectury-forge:${Versions.ARCHITECTURY}")
+    modImplementation("dev.ftb.mods:ftb-library-forge:${Versions.FTB_LIBRARY}")
+    modImplementation("dev.ftb.mods:ftb-teams-forge:${Versions.FTB_TEAMS}")
 }
 
-neoForge {
-    version = Versions.NEOFORGE
+mixin {
+    add(sourceSets["main"], "${Properties.MOD_ID}.refmap.json")
+    config("${Properties.MOD_ID}.mixins.json")
+    config("${Properties.MOD_ID}.forge.mixins.json")
+}
+
+legacyForge {
+    version = "${Versions.MINECRAFT}-${Versions.FORGE}"
     parchment {
         minecraftVersion = Versions.PARCHMENT_MINECRAFT
         mappingsVersion = Versions.PARCHMENT
@@ -71,18 +89,18 @@ neoForge {
         configureEach {
             systemProperty("forge.logging.markers", "REGISTRIES")
             systemProperty("forge.logging.console.level", "debug")
-            systemProperty("neoforge.enabledGameTestNamespaces", Properties.MOD_ID)
+            systemProperty("forge.enabledGameTestNamespaces", Properties.MOD_ID)
         }
         create("client") {
             client()
-            ideName = "NeoForge Client (:${project.name})"
+            ideName = "Forge Client (:${project.name})"
             gameDirectory.set(file("runs/client"))
             sourceSet = sourceSets["test"]
             jvmArguments.set(setOf("-Dmixin.debug.verbose=true", "-Dmixin.debug.export=true"))
         }
         create("clientExtra") {
             client()
-            ideName = "NeoForge Client 2 (:${project.name})"
+            ideName = "Forge Client 2 (:${project.name})"
             gameDirectory.set(file("runs/client2"))
             sourceSet = sourceSets["test"]
             jvmArguments.set(setOf("-Dmixin.debug.verbose=true", "-Dmixin.debug.export=true"))
@@ -90,7 +108,7 @@ neoForge {
         }
         create("server") {
             server()
-            ideName = "NeoForge Server (:${project.name})"
+            ideName = "Forge Server (:${project.name})"
             gameDirectory.set(file("runs/server"))
             programArgument("--nogui")
             sourceSet = sourceSets["test"]
@@ -107,6 +125,11 @@ neoForge {
 }
 
 tasks {
+    named<Jar>("jar").configure {
+        manifest {
+            attributes("MixinConfigs" to "${Properties.MOD_ID}.mixins.json,${Properties.MOD_ID}.forge.mixins.json")
+        }
+    }
     named<ProcessResources>("processResources").configure {
         filesMatching("*.mixins.json") {
             filter<LineContains>("negate" to true, "contains" to setOf("refmap"))
@@ -115,11 +138,11 @@ tasks {
 }
 
 publishMods {
-    file.set(tasks.named<Jar>("jar").get().archiveFile)
-    modLoaders.add("neoforge")
+    file.set(tasks.named<Jar>("reobfJar").get().archiveFile)
+    modLoaders.add("forge")
     changelog = rootProject.file("CHANGELOG.md").readText()
-    displayName = "Neoforge-${Versions.MOD}+${Versions.MINECRAFT}"
-    version = "${Versions.MOD}+${Versions.MINECRAFT}-neoforge"
+    displayName = "Forge-${Versions.MOD}+${Versions.MINECRAFT}"
+    version = "${Versions.MOD}+${Versions.MINECRAFT}-forge"
     type = STABLE
 
     curseforge {
@@ -127,7 +150,7 @@ publishMods {
         accessToken = providers.environmentVariable("CF_TOKEN")
 
         minecraftVersions.add(Versions.MINECRAFT)
-        javaVersions.add(JavaVersion.VERSION_21)
+        javaVersions.add(JavaVersion.VERSION_17)
 
         clientRequired = true
         serverRequired = true

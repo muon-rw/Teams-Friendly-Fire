@@ -95,14 +95,14 @@ tasks {
         "fabric_loader_range" to Versions.FABRIC_LOADER_RANGE,
         "mod_name" to Properties.MOD_NAME,
         "mod_author" to Properties.MOD_AUTHOR,
-        "neoforge_mod_contributors" to Properties.MOD_CONTRIBUTORS.joinToString(),
+        "forge_mod_contributors" to Properties.MOD_CONTRIBUTORS.joinToString(),
         "fabric_mod_contributors" to Properties.MOD_CONTRIBUTORS.joinToString(separator = "\",\n\t\t\""),
         "mod_id" to Properties.MOD_ID,
         "mod_license" to Properties.LICENSE,
         "mod_description" to Properties.DESCRIPTION,
-        "neoforge_version" to Versions.NEOFORGE,
-        "neoforge_minecraft_version_range" to Versions.NEOFORGE_MINECRAFT_RANGE,
-        "neoforge_loader_version_range" to Versions.NEOFORGE_LOADER_RANGE,
+        "forge_version" to Versions.FORGE,
+        "forge_minecraft_version_range" to Versions.FORGE_MINECRAFT_RANGE,
+        "forge_loader_version_range" to Versions.FORGE_LOADER_RANGE,
         "java_version" to Versions.JAVA,
         "curseforge_page" to Properties.CURSEFORGE_PAGE,
         "modrinth_page" to Properties.MODRINTH_PAGE,
@@ -113,7 +113,7 @@ tasks {
 
     withType<ProcessResources>().matching { processResourcesTasks.contains(it.name) }.configureEach {
         inputs.properties(expandProps)
-        filesMatching(setOf("fabric.mod.json", "META-INF/neoforge.mods.toml", "*.mixins.json")) {
+        filesMatching(setOf("fabric.mod.json", "META-INF/mods.toml", "*.mixins.json", "pack.mcmeta")) {
             expand(expandProps)
         }
         exclude("\\.cache")

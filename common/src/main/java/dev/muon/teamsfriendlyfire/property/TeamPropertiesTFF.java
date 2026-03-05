@@ -28,7 +28,7 @@ public final class TeamPropertiesTFF {
             new BooleanProperty(rl("pvp_between_allies"), false);
 
     private static ResourceLocation rl(String path) {
-        return ResourceLocation.fromNamespaceAndPath(NAMESPACE, path);
+        return new ResourceLocation(NAMESPACE, path);
     }
 
     private TeamPropertiesTFF() {}

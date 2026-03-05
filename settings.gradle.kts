@@ -6,6 +6,12 @@ pluginManagement {
         maven("https://maven.neoforged.net/releases") {
             name = "NeoForged"
         }
+        maven("https://maven.minecraftforge.net") {
+            name = "MinecraftForge"
+        }
+        maven("https://maven.parchmentmc.org") {
+            name = "ParchmentMC"
+        }
         maven("https://maven.fabricmc.net/") {
             name = "Fabric"
         }
@@ -23,4 +29,4 @@ plugins {
 rootProject.name = "Teams-Friendly-Fire"
 include("common")
 include("fabric")
-include("neoforge")
+include("forge")
