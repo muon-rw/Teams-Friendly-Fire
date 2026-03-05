@@ -1,5 +1,5 @@
 {
   "ftbteamsconfig.teamsfriendlyfire": "Friendly Fire Settings",
-  "ftbteamsconfig.teamsfriendlyfire.pvp_between_allies": "Allow PvP Between Allies",
-  "ftbteamsconfig.teamsfriendlyfire.pvp_between_members": "Allow PvP Between Members"
+  "ftbteamsconfig.teamsfriendlyfire.pvp_between_allies": "Allow Damage to Allies",
+  "ftbteamsconfig.teamsfriendlyfire.pvp_between_members": "Allow Damage to Members"
 }
