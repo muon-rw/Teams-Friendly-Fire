@@ -108,6 +108,13 @@ tasks {
     named<ProcessResources>("processResources").configure {
         exclude("${Properties.MOD_ID}.cfg")
     }
+    register<Copy>("sendToModpack") {
+        group = "publishing"
+        description = "Copies a dev-versioned jar to the local Fabric modpack"
+        from(named<RemapJarTask>("remapJar").flatMap { it.archiveFile })
+        into("${System.getProperty("user.home")}/Documents/curseforge/minecraft/Instances/Fabric/mods")
+        rename { it.replace(Versions.MOD, "${Versions.MOD}-dev") }
+    }
 }
 
 publishMods {

@@ -135,6 +135,13 @@ tasks {
             filter<LineContains>("negate" to true, "contains" to setOf("refmap"))
         }
     }
+    register<Copy>("sendToModpack") {
+        group = "publishing"
+        description = "Copies a dev-versioned jar to the local Forge modpack"
+        from(named<Jar>("reobfJar").flatMap { it.archiveFile })
+        into("${System.getProperty("user.home")}/Documents/curseforge/minecraft/Instances/Forge/mods")
+        rename { it.replace(Versions.MOD, "${Versions.MOD}-dev") }
+    }
 }
 
 publishMods {
