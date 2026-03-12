@@ -1,6 +1,5 @@
 import dev.muon.teamsfriendlyfire.gradle.Properties
 import dev.muon.teamsfriendlyfire.gradle.Versions
-import org.apache.tools.ant.filters.LineContains
 import org.gradle.jvm.tasks.Jar
 
 plugins {
@@ -128,11 +127,6 @@ tasks {
     named<Jar>("jar").configure {
         manifest {
             attributes("MixinConfigs" to "${Properties.MOD_ID}.mixins.json,${Properties.MOD_ID}.forge.mixins.json")
-        }
-    }
-    named<ProcessResources>("processResources").configure {
-        filesMatching("*.mixins.json") {
-            filter<LineContains>("negate" to true, "contains" to setOf("refmap"))
         }
     }
     register<Copy>("sendToModpack") {
