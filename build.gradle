@@ -34,12 +34,6 @@ publishMods {
             projectId = project.curseforge_id
             projectSlug = project.mod_id
             minecraftVersions.add(mcVersion)
-            requires {
-                slug = 'ftb-teams'
-            }
-            requires {
-                slug = 'ftb-library'
-            }
         }
 
         curseforge('curseforgeFabric') {
@@ -47,12 +41,17 @@ publishMods {
             file = project(':fabric').tasks.named('jar', Jar).flatMap { it.archiveFile }
             modLoaders.add('fabric')
             displayName = fabricDisplayName
+            requires { slug = 'ftb-teams-fabric' }
+            requires { slug = 'ftb-library-fabric' }
         }
         curseforge('curseforgeNeoforge') {
             from cfOptions
             file = project(':neoforge').tasks.named('jar', Jar).flatMap { it.archiveFile }
             modLoaders.add('neoforge')
             displayName = neoforgeDisplayName
+            // CurseForge slug uses `-forge` for the NeoForge build
+            requires { slug = 'ftb-teams-forge' }
+            requires { slug = 'ftb-library-forge' }
         }
     }
 
@@ -61,14 +60,9 @@ publishMods {
             accessToken = providers.environmentVariable('MODRINTH_TOKEN')
             projectId = project.modrinth_id
             minecraftVersions.add(mcVersion)
-            requires {
-                slug = 'ftb-teams'
-            }
-            requires {
-                slug = 'ftb-library'
-            }
         }
 
+        // FTB Teams / Library aren't published on Modrinth, so no `requires` blocks here.
         modrinth('modrinthFabric') {
             from mrOptions
             file = project(':fabric').tasks.named('jar', Jar).flatMap { it.archiveFile }
