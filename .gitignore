@@ -23,3 +23,6 @@ run
 runs
 .cache
 .vscode
+
+.cursor
+.claude
