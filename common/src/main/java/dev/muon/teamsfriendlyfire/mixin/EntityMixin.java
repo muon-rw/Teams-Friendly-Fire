@@ -8,15 +8,16 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 /**
- * Mixin to make Entity.isAlliedTo respect FTB Teams and our PvP flags.
- * Returns true if two entities' effective owners are protected allies.
+ * Makes Entity.considersEntityAsAlly respect FTB Teams and our PvP flags.
+ * Entity.isAlliedTo(Entity) is final in 26.1 and delegates to this hook.
  */
 @Mixin(Entity.class)
 public class EntityMixin {
 
     @ModifyReturnValue(
-            method = "isAlliedTo(Lnet/minecraft/world/entity/Entity;)Z",
-            at = @At(value = "RETURN")
+            method = "considersEntityAsAlly(Lnet/minecraft/world/entity/Entity;)Z",
+            at = @At(value = "RETURN"),
+            remap = false
     )
     private boolean teamsfriendlyfire$checkFTBTeamsAlliance(boolean original, Entity other) {
         if (original) return true;

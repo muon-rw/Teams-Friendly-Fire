@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(Player.class)
 public class PlayerMixin {
 
-    @ModifyReturnValue(method = "canHarmPlayer", at = @At("RETURN"))
+    @ModifyReturnValue(method = "canHarmPlayer", at = @At("RETURN"), remap = false)
     private boolean teamsfriendlyfire$preventFTBTeamPvP(boolean original, Player other) {
         if (!original) return false;
         Player self = (Player) (Object) this;

@@ -1,9 +1,8 @@
 package dev.muon.teamsfriendlyfire.property;
 
-import dev.ftb.mods.ftbteams.api.FTBTeamsAPI;
 import dev.ftb.mods.ftbteams.api.property.BooleanProperty;
 import dev.ftb.mods.ftbteams.api.property.TeamProperty;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 /**
  * Team properties added by Teams Friendly Fire.
@@ -27,8 +26,8 @@ public final class TeamPropertiesTFF {
     public static final TeamProperty<Boolean> PVP_BETWEEN_ALLIES =
             new BooleanProperty(rl("pvp_between_allies"), false);
 
-    private static ResourceLocation rl(String path) {
-        return ResourceLocation.fromNamespaceAndPath(NAMESPACE, path);
+    private static Identifier rl(String path) {
+        return Identifier.fromNamespaceAndPath(NAMESPACE, path);
     }
 
     private TeamPropertiesTFF() {}
