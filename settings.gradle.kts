@@ -6,6 +6,9 @@ pluginManagement {
         maven("https://maven.neoforged.net/releases") {
             name = "NeoForged"
         }
+        maven("https://maven.muon.rip/releases/") {
+            name = "MixinMCP"
+        }
         maven("https://maven.fabricmc.net/") {
             name = "Fabric"
         }

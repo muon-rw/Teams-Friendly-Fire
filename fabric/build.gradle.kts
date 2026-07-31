@@ -47,6 +47,12 @@ repositories {
             includeGroup("dev.ftb.mods")
         }
     }
+    maven {
+        url = uri("https://maven.siphalor.de/")
+        content {
+            includeGroupByRegex("de\\.siphalor.*")
+        }
+    }
 }
 
 

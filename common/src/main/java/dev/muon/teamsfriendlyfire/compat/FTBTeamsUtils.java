@@ -2,6 +2,8 @@ package dev.muon.teamsfriendlyfire.compat;
 
 import dev.ftb.mods.ftbteams.api.FTBTeamsAPI;
 import dev.ftb.mods.ftbteams.api.Team;
+import dev.ftb.mods.ftbteams.api.TeamRank;
+import dev.muon.teamsfriendlyfire.config.ConfigTFF;
 import dev.muon.teamsfriendlyfire.property.TeamPropertiesTFF;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.OwnableEntity;
@@ -37,11 +39,22 @@ public final class FTBTeamsUtils {
         if (team1.getId().equals(team2.getId())) {
             return !team1.getProperty(TeamPropertiesTFF.PVP_BETWEEN_MEMBERS);
         }
-        if (team1.getRankForPlayer(playerId2).isAllyOrBetter() || team2.getRankForPlayer(playerId1).isAllyOrBetter()) {
+        boolean team1AlliesPlayer2 = isExplicitAlly(team1.getRankForPlayer(playerId2));
+        boolean team2AlliesPlayer1 = isExplicitAlly(team2.getRankForPlayer(playerId1));
+        boolean allied = ConfigTFF.REQUIRE_MUTUAL_ALLIES.get()
+                ? team1AlliesPlayer2 && team2AlliesPlayer1
+                : team1AlliesPlayer2 || team2AlliesPlayer1;
+        if (allied) {
             return !team1.getProperty(TeamPropertiesTFF.PVP_BETWEEN_ALLIES)
                     && !team2.getProperty(TeamPropertiesTFF.PVP_BETWEEN_ALLIES);
         }
         return false;
+    }
+
+    // INVITED passes isAllyOrBetter(), and getRankForPlayer returns INVITED for
+    // every unknown player when a team is free-to-join; neither is an alliance
+    private static boolean isExplicitAlly(TeamRank rank) {
+        return rank == TeamRank.ALLY || rank.isMemberOrBetter();
     }
 
     private static Optional<Team> resolveTeam(UUID playerId, Level level) {
