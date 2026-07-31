@@ -1,5 +1,6 @@
 package dev.muon.teamsfriendlyfire;
 
+import dev.muon.teamsfriendlyfire.config.ConfigTFF;
 import dev.muon.teamsfriendlyfire.property.TeamPropertiesTFF;
 import dev.ftb.mods.ftbteams.api.event.TeamCollectPropertiesEvent;
 import dev.ftb.mods.ftbteams.api.event.TeamEvent;
@@ -15,6 +16,7 @@ public class TeamsFriendlyFire {
     public static final Logger LOG = LoggerFactory.getLogger("Teams Friendly Fire");
 
     public static void init() {
+        ConfigTFF.load();
         TeamEvent.COLLECT_PROPERTIES.register(TeamsFriendlyFire::registerProperties);
     }
 

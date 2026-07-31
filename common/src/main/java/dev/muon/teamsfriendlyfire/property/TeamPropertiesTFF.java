@@ -1,7 +1,5 @@
 package dev.muon.teamsfriendlyfire.property;
 
-import dev.ftb.mods.ftbteams.api.FTBTeamsAPI;
-import dev.ftb.mods.ftbteams.api.property.BooleanProperty;
 import dev.ftb.mods.ftbteams.api.property.TeamProperty;
 import net.minecraft.resources.ResourceLocation;
 
@@ -18,14 +16,20 @@ public final class TeamPropertiesTFF {
      * Default false = members cannot hurt each other.
      */
     public static final TeamProperty<Boolean> PVP_BETWEEN_MEMBERS =
-            new BooleanProperty(rl("pvp_between_members"), false);
+            new OfficerEditableBooleanProperty(rl("pvp_between_members"), false);
 
     /**
      * Allow PvP between allied teams.
      * Default false = allies cannot hurt each other.
      */
     public static final TeamProperty<Boolean> PVP_BETWEEN_ALLIES =
-            new BooleanProperty(rl("pvp_between_allies"), false);
+            new OfficerEditableBooleanProperty(rl("pvp_between_allies"), false);
+
+    public static TeamProperty<?> canonical(TeamProperty<?> property) {
+        if (PVP_BETWEEN_MEMBERS.getId().equals(property.getId())) return PVP_BETWEEN_MEMBERS;
+        if (PVP_BETWEEN_ALLIES.getId().equals(property.getId())) return PVP_BETWEEN_ALLIES;
+        return property;
+    }
 
     private static ResourceLocation rl(String path) {
         return new ResourceLocation(NAMESPACE, path);

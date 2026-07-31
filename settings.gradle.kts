@@ -12,6 +12,9 @@ pluginManagement {
         maven("https://maven.parchmentmc.org") {
             name = "ParchmentMC"
         }
+        maven("https://maven.muon.rip/releases") {
+            name = "MuonR"
+        }
         maven("https://maven.fabricmc.net/") {
             name = "Fabric"
         }

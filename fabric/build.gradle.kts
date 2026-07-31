@@ -112,7 +112,7 @@ tasks {
         group = "publishing"
         description = "Copies a dev-versioned jar to the local Fabric modpack"
         from(named<RemapJarTask>("remapJar").flatMap { it.archiveFile })
-        into("${System.getProperty("user.home")}/Documents/curseforge/minecraft/Instances/Fabric/mods")
+        into("${System.getProperty("user.home")}/curseforge/minecraft/Instances/Fabric/mods")
         rename { it.replace(Versions.MOD, "${Versions.MOD}-dev") }
     }
 }

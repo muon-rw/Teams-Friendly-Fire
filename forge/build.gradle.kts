@@ -133,7 +133,7 @@ tasks {
         group = "publishing"
         description = "Copies a dev-versioned jar to the local Forge modpack"
         from(named<Jar>("reobfJar").flatMap { it.archiveFile })
-        into("${System.getProperty("user.home")}/Documents/curseforge/minecraft/Instances/Forge/mods")
+        into("${System.getProperty("user.home")}/curseforge/minecraft/Instances/Forge/mods")
         rename { it.replace(Versions.MOD, "${Versions.MOD}-dev") }
     }
 }
