@@ -4,8 +4,17 @@ plugins {
 }
 
 base {
-    archivesName = "${mod_id}-${project.name}-${minecraft_version}"
+    archivesName = "${mod_id}-${project.name}"
 }
+
+// Snapshot publishing is selected by running any task whose name contains "snapshot"
+// (e.g. `publishToSnapshots`) or by passing `-Psnapshot=true`. Reposilite treats
+// `-SNAPSHOT` versions as mutable, so republishing the same version updates the artifact —
+// mirroring the `mavenLocal()` workflow across machines via `maven.muon.rip/snapshots/`.
+def isSnapshotPublish = gradle.startParameter.taskNames.any { it.toLowerCase().contains('snapshot') } || project.hasProperty('snapshot')
+version = isSnapshotPublish
+        ? "${project.version}+${minecraft_version}-SNAPSHOT"
+        : "${project.version}+${minecraft_version}"
 
 java {
     toolchain {
@@ -47,12 +56,31 @@ repositories {
     }
     maven {url = 'https://maven.blamejared.com'}
     maven {url = 'https://maven.fzzyhmstrs.me/'}
+    maven {
+        url = 'https://maven.muon.rip/snapshots/'
+        content { includeGroupAndSubgroups 'dev.muon' }
+    }
+    maven {
+        url = 'https://maven.muon.rip/releases/'
+        content { includeGroupAndSubgroups 'dev.muon' }
+    }
     maven {url = 'https://maven.fabricmc.net/'} // Required by Fzzy even in common
 
     // MixinSquared
     maven { url = "https://maven.bawnorton.com/releases" }
     // MixinSquared backup
     // maven { url = "https://maven.enjarai.dev/mirrors" }
+
+    // mavenLocal is intentionally last so remote snapshots win on a same-version
+    // coord — useful when bouncing between machines via the snapshots repo.
+    mavenLocal()
+}
+
+// Re-check -SNAPSHOT metadata on every build (default TTL is 24h). Only affects
+// changing modules; release coords stay fully cached. Pair with the snapshots repo
+// content filter above so this only impacts dev.muon resolution.
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
 sourcesJar {
@@ -123,14 +151,28 @@ publishing {
         }
     }
     repositories {
-        maven {
-            url System.getenv('MAVEN_URL')
-            credentials {
-                username = System.getenv("MAVEN_USERNAME")
-                password = System.getenv("MAVEN_PASSWORD")
+        // Only the matching repo is registered so a stray `./gradlew publish` can't push
+        // a non-SNAPSHOT artifact at the snapshots URL (or vice versa). Use the root-level
+        // `publishToSnapshots` / `publishToReleases` aggregators rather than `publish`.
+        if (isSnapshotPublish) {
+            maven {
+                name = 'muonSnapshots'
+                url = System.getenv('SNAPSHOT_MAVEN_URL') ?: 'https://maven.muon.rip/snapshots/'
+                credentials {
+                    username = System.getenv('MAVEN_USERNAME')
+                    password = System.getenv('MAVEN_PASSWORD')
+                }
+            }
+        } else {
+            maven {
+                name = 'muonReleases'
+                url = System.getenv('MAVEN_URL') ?: 'https://maven.muon.rip/releases/'
+                credentials {
+                    username = System.getenv('MAVEN_USERNAME')
+                    password = System.getenv('MAVEN_PASSWORD')
+                }
             }
         }
-
     }
 }
 
