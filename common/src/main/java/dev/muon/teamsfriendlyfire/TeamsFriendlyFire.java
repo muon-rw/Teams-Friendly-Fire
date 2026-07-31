@@ -1,6 +1,7 @@
 package dev.muon.teamsfriendlyfire;
 
 import dev.ftb.mods.ftbteams.api.event.CollectTeamPropertiesEvent;
+import dev.muon.teamsfriendlyfire.config.ConfigTFF;
 import dev.muon.teamsfriendlyfire.property.TeamPropertiesTFF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,8 @@ public class TeamsFriendlyFire {
      * {@code FTBTeamsEvents.COLLECT_TEAM_PROPERTIES}).
      */
     public static void init(Consumer<CollectTeamPropertiesEvent> registerPropertyCollector) {
+        ConfigTFF.register();
+        TeamPropertiesTFF.bootstrap();
         registerPropertyCollector.accept(data -> {
             data.addProperty(TeamPropertiesTFF.PVP_BETWEEN_MEMBERS);
             data.addProperty(TeamPropertiesTFF.PVP_BETWEEN_ALLIES);

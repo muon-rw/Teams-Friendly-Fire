@@ -1,6 +1,5 @@
 package dev.muon.teamsfriendlyfire.property;
 
-import dev.ftb.mods.ftbteams.api.property.BooleanProperty;
 import dev.ftb.mods.ftbteams.api.property.TeamProperty;
 import net.minecraft.resources.Identifier;
 
@@ -17,14 +16,18 @@ public final class TeamPropertiesTFF {
      * Default false = members cannot hurt each other.
      */
     public static final TeamProperty<Boolean> PVP_BETWEEN_MEMBERS =
-            new BooleanProperty(rl("pvp_between_members"), false);
+            new OfficerEditableBooleanProperty(rl("pvp_between_members"), false);
 
     /**
      * Allow PvP between allied teams.
      * Default false = allies cannot hurt each other.
      */
     public static final TeamProperty<Boolean> PVP_BETWEEN_ALLIES =
-            new BooleanProperty(rl("pvp_between_allies"), false);
+            new OfficerEditableBooleanProperty(rl("pvp_between_allies"), false);
+
+    // Forces class init at mod init, on both sides: the custom property type must
+    // be registered before the first team sync packet is decoded on the client
+    public static void bootstrap() {}
 
     private static Identifier rl(String path) {
         return Identifier.fromNamespaceAndPath(NAMESPACE, path);
