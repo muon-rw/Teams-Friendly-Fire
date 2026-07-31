@@ -132,8 +132,8 @@ publishMods {
         minecraftVersions.add(Versions.MINECRAFT)
         javaVersions.add(JavaVersion.VERSION_21)
 
-        clientRequired = true
-        serverRequired = true
+        client = true
+        server = true
 
         requires {
             slug = "ftb-teams-fabric"
